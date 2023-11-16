@@ -1,3 +1,4 @@
+#[lint_allow(self_transfer)]
 module dacade_deepbook::book {
     use deepbook::clob_v2 as deepbook;
     use deepbook::custodian_v2 as custodian;
@@ -202,30 +203,5 @@ module dacade_deepbook::book {
         );
         transfer::public_transfer(base, tx_context::sender(ctx));
         transfer::public_transfer(quote, tx_context::sender(ctx));
-    }
-}
-
-module dacade_deepbook::wbtc {
-    use sui::coin::{Coin, TreasuryCap, Self};
-    use std::option;
-    use sui::transfer;
-    use sui::tx_context::{TxContext, Self};
-
-    struct WBTC has drop {}
-
-    fun init(witness: WBTC, ctx: &mut TxContext) {
-        let (treasury, metadata) = coin::create_currency(witness, 6, b"WBTC", b"", b"", option::none(), ctx);
-        transfer::public_freeze_object(metadata);
-        transfer::public_transfer(treasury, tx_context::sender(ctx))
-    }
-
-    public entry fun mint(
-        treasury_cap: &mut TreasuryCap<WBTC>, amount: u64, recipient: address, ctx: &mut TxContext
-    ) {
-        coin::mint_and_transfer(treasury_cap, amount, recipient, ctx)
-    }
-
-    public entry fun burn(treasury_cap: &mut TreasuryCap<WBTC>, coin: Coin<WBTC>) {
-        coin::burn(treasury_cap, coin);
     }
 }

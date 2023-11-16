@@ -14,7 +14,11 @@ brew install libpq
 
 ### Run a local network
 ```
-RUST_LOG="consensus=off" cargo run --bin sui-test-validator
+git clone --branch devnet https://github.com/MystenLabs/sui.git
+
+cd sui
+
+RUST_LOG="off,sui_node=info" cargo run --bin sui-test-validator
 ```
 
 ### Install SUI Wallet (optionally)
@@ -125,7 +129,7 @@ Repeat the same for the secondary account that we created previously (use `sui c
 ### Mint WBTC token
 Now we need to mint WBTC tokens. Switch to the address that you've used to publish the contract and run this command to mint tokens:
 ```
-sui client call --function mint --module wbtc --package $PACKAGE_ID  --args $WBTC_TREASURY_CAP_ID "10000000000" $ACCOUNT_ID1 --gas-budget 10000000
+sui client call --function mint --module wbtc --package $PACKAGE_ID  --args $WBTC_TREASURY_CAP_ID "10000000000" $ACCOUNT_ID1 --gas-budget 10000000 --json
 ```
 Re-run the same command but change `ACCOUNT_ID1` to `ACCOUNT_ID2`.
 Check the output and look for an object with `objectType` that has a value like this `String("0x2::coin::Coin<$PACKAGE_ID::wbtc::WBTC>")` and get the value of `objectId` and assign it ot `ACCOUNT1_WBTC_OBJECT_ID`.
