@@ -7,6 +7,7 @@ module dacade_deepbook::wbtc {
 
     struct WBTC has drop {}
 
+    #[allow(unused_function)]
     fun init(witness: WBTC, ctx: &mut TxContext) {
         let (treasury, metadata) = coin::create_currency(witness, 6, b"WBTC", b"", b"", option::none(), ctx);
         transfer::public_freeze_object(metadata);
