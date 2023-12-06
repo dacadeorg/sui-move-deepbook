@@ -2,3 +2,4 @@
 *.json
 build/
 Move.lock
+bin
