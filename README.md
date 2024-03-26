@@ -32,7 +32,16 @@ If you don't have `brew` installed, run this:
 
 Next, we need rust and cargo:
 ```
-curl https://sh.rustup.rs -sSf | sh
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
+if you get an error like this:
+```
+error: could not amend shell profile: '/home/codespace/.config/fish/conf.d/rustup.fish': could not write rcfile file: '/home/codespace/.config/fish/conf.d/rustup.fish': No such file or directory (os error 2)
+```
+run these commands and re-run the rustup script:
+```
+mkdir -p /home/codespace/.config/fish/conf.d
+touch /home/codespace/.config/fish/conf.d/rustup.fish
 ```
 
 ### Install Sui
@@ -41,18 +50,18 @@ If you are using Github codespaces, it's recommended to use pre-built binaries r
 To download pre-built binaries, you should run `download-sui-binaries.sh` in the terminal. 
 This scripts takes three parameters (in this particular order) - `version`, `environment` and `os`:
 - sui version, for example `1.15.0`. You can lookup a more up-to-date version available here [SUI Github releases](https://github.com/MystenLabs/sui/releases).
-- `environment` - that's the environment that you are targeting, in our case it's `devnet`. Other available options are: `testnet` and `mainnet`.
+- `environment` - that's the environment that you are targeting, in our case it's `testnet`. Other available options are: `devnet` and `mainnet`.
 - `os` - name of the os. If you are using Github codespaces, put `ubuntu-x86_64`. Other available options are: `macos-arm64`, `macos-x86_64`, `ubuntu-x86_64`, `windows-x86_64` (not for WSL).
 
 To donwload SUI binaries for codespace, run this command:
 ```
-./download-sui-binaries.sh "v1.15.0" "devnet" "ubuntu-x86_64"
+./download-sui-binaries.sh "v1.21.1" "testnet" "ubuntu-x86_64"
 ```
 and restart your terminal window.
 
 If you prefer to build the binaries from source, run this command in your terminal:
 ```
-cargo install --locked --git https://github.com/MystenLabs/sui.git --branch devnet sui
+cargo install --locked --git https://github.com/MystenLabs/sui.git --branch testnet sui
 ```
 
 ### Install dev tools (not required, might take a while when installin in codespaces)
@@ -69,7 +78,7 @@ RUST_LOG="off,sui_node=info" sui-test-validator
 
 Optionally, you can run it from sources.
 ```
-git clone --branch devnet https://github.com/MystenLabs/sui.git
+git clone --branch testnet https://github.com/MystenLabs/sui.git
 
 cd sui
 
@@ -101,6 +110,16 @@ After this, you should see the ouput with the wallet address and a mnemonic phra
 
 Additionally, you can create more addresses and to do so, follow the next section - `Create addresses`.
 
+### Testnet configuration
+
+For the sake of this tutorial, let's add a testnet node:
+```
+sui client new-env --rpc https://fullnode.testnet.sui.io:443 --alias testnet
+```
+and switch to `testnet`:
+```
+sui client switch --env testnet
+```
 
 ### Create addresses
 For this tutorial we need two separate addresses. To create an address run this command in the terminal:
@@ -144,6 +163,13 @@ sui client switch --address <ADDRESS>
 abd run the HTTP request to mint some SUI tokens to this account as well.
 
 Also, you can top up the balance via the wallet app. To do that, you need to import an account to the wallet.
+
+### Get testnet SUI tokens
+After you switched to `testnet`, run this command to get 1 testnet SUI:
+```
+sui client faucet
+```
+it will use the the current active address and the current active network.
 
 ## Build and publish a smart contract
 
