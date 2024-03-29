@@ -56,4 +56,4 @@ echo "# SUI aliases" >> ${SHELL_CONFIG}
 
 source ${SHELL_CONFIG}
 
-echo "Installation completed. Open a new terminal window and verify installation by running sui --verion"
+echo "Installation completed. Open a new terminal window and verify installation by running sui --version"
